@@ -8,27 +8,33 @@ string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER) # Convert project name to upp
 
 project(${PROJECT_NAME} VERSION 0.1 LANGUAGES CXX)
 
-# Debug postfix
-set(CMAKE_DEBUG_POSTFIX _Debug)
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Optimised" CACHE STRING "" FORCE)
+
+# MSVC ONLY!!!
+set(CMAKE_CXX_FLAGS_OPTIMISED "/O2 /Zi /DEBUG" CACHE STRING "Flags for Optimised configuration" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_OPTIMISED "/DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Linker flags for Optimised configuration" FORCE)
+
 # Enable folder structure in the IDE
 set_property(GLOBAL PROPERTY USE_FOLDERS YES)
 
 # Check if the platform is 64-bit or 32-bit and set appropriate definitions
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_PLATFORM_X64)
-    MESSAGE(STATUS "64 bit platform - adding definition: ${PROJECT_NAME_UPPER}_PLATFORM_X64")
+    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X64)
 ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_PLATFORM_X86)
-    MESSAGE(STATUS "32 bit platform - adding definition: ${PROJECT_NAME_UPPER}_PLATFORM_X86")
+    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X86)
 ELSE()
 	MESSAGE( FATAL_ERROR "Unknown CPU architecture, CMAKE will exit." )
 ENDIF()
+
+set(build_dir "${parent_build_dir}/${PROJECT_NAME}")
+message("Build Directory for ${PROJECT_NAME} set to ${build_dir}")
+set(CMAKE_BUILD_PATH ${build_dir})
 
 # Compile definitions
 
 # Windows only
 if(WIN32)
-    add_definitions(-D${PROJECT_NAME_UPPER}_PLATFORM_WINDOWS)
+    add_definitions(-D${PROJECT_NAME_UPPER}_WINDOWS)
 endif()
 
 # Add the core library
@@ -38,7 +44,15 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED ON
     OUTPUT_NAME ${PROJECT_NAME}
-    DEBUG_POSTFIX "_Debug"
+    ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${out_dir}/debug"
+    ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${out_dir}/release"
+    ARCHIVE_OUTPUT_DIRECTORY_OPTIMISED "${out_dir}/optimised"
+    LIBRARY_OUTPUT_DIRECTORY_DEBUG "${out_dir}/debug"
+    LIBRARY_OUTPUT_DIRECTORY_RELEASE "${out_dir}/release"
+    LIBRARY_OUTPUT_DIRECTORY_OPTIMISED "${out_dir}/optimised"
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${out_dir}/debug"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${out_dir}/release"
+    RUNTIME_OUTPUT_DIRECTORY_OPTIMISED "${out_dir}/optimised"
 )
 
 # Add our module implementations included in this lib
