@@ -53,6 +53,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_DEBUG "${out_dir}/debug"
     RUNTIME_OUTPUT_DIRECTORY_RELEASE "${out_dir}/release"
     RUNTIME_OUTPUT_DIRECTORY_OPTIMISED "${out_dir}/optimised"
+    FOLDER "${parent_prj}"
 )
 
 # Add our module implementations included in this lib

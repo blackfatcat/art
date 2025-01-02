@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.31)
 # Set project name and uppercase version
 set(PROJECT_NAME "art")
 set(PROJECT_NAME_UPPER "")
+set(parent_prj "${parent_prj}/${PROJECT_NAME}")
 
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER) # Convert project name to uppercase
 
@@ -22,9 +23,6 @@ ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 ELSE()
 	MESSAGE( FATAL_ERROR "Unknown CPU architecture, CMAKE will exit." )
 ENDIF()
-
-# Enable folder structure in the IDE
-set_property(GLOBAL PROPERTY USE_FOLDERS YES)
 
 # Option to build shared or static libraries
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -47,7 +45,9 @@ add_subdirectory(core)
 # add_subdirectory(graphics)
 # add_subdirectory(window)
 
-# Add the audio library
+# external libs
+add_subdirectory(extern)
+
 add_library(${PROJECT_NAME} art.ixx)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -63,6 +63,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_DEBUG "${out_dir}/debug"
     RUNTIME_OUTPUT_DIRECTORY_RELEASE "${out_dir}/release"
     RUNTIME_OUTPUT_DIRECTORY_OPTIMISED "${out_dir}/optimised"
+    FOLDER "${parent_prj}"
 )
 
 # Add our modules included in this lib
@@ -74,4 +75,4 @@ target_sources(${PROJECT_NAME}
 )
 
 # Link against the subsystem libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC art_core)
+target_link_libraries(${PROJECT_NAME} PUBLIC art_core art_extern)
