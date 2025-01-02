@@ -43,8 +43,9 @@ set(TF_BUILD_EXAMPLES OFF CACHE BOOL "Build Taskflow examples" FORCE)
 
 # external libs
 add_subdirectory(taskflow)
+add_subdirectory(entt)
 
-add_library(${PROJECT_NAME} extern.ixx)
+add_library(${PROJECT_NAME})
 
 if (CMAKE_SYSTEM_NAME STREQUAL Emscripten)
     target_link_options(${PROJECT_NAME} PUBLIC -sASSERTIONS=1 -sPROXY_TO_PTHREAD -sTOTAL_MEMORY=1536MB -sEXIT_RUNTIME=1 -sUSE_PTHREADS=1)
@@ -67,13 +68,53 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     FOLDER "${parent_prj}"
 )
 
-# Add our modules included in this lib
-target_sources(${PROJECT_NAME}
+file(GLOB mod_impls CONFIGURE_DEPENDS "*.cppm")
+file(GLOB mod_headers CONFIGURE_DEPENDS "*.ixx")
+
+file(GLOB impls CONFIGURE_DEPENDS "*.cpp")
+file(GLOB headers CONFIGURE_DEPENDS "*.h")
+
+# SOURCES
+if(mod_impls)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+        FILE_SET module_impls TYPE CXX_MODULES
+        FILES
+            ${mod_impls}
+    )
+endif()
+
+if(impls)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${impls}
+    )
+endif()
+
+if(mod_headers)
+    target_sources(${PROJECT_NAME}
+        PUBLIC
+        FILE_SET module_headers TYPE CXX_MODULES
+        FILES
+            ${mod_headers}
+    )
+endif()
+
+# INCLUDES
+if(headers)
+    target_include_directories(${PROJECT_NAME}
+        PUBLIC
+            ${headers}
+    )
+endif()
+
+# Add include directories
+target_include_directories(${PROJECT_NAME}
     PUBLIC
-    FILE_SET module_headers TYPE CXX_MODULES
-    FILES
-        extern.ixx
+        taskflow/taskflow
+    PUBLIC
+        entt/src
 )
 
 # Link against the subsystem libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow ${ATOMIC_LIBRARY})
+target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow ${ATOMIC_LIBRARY} EnTT)

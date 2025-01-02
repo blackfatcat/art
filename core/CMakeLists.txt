@@ -14,9 +14,6 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Optimised" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_OPTIMISED "/O2 /Zi /DEBUG" CACHE STRING "Flags for Optimised configuration" FORCE)
 set(CMAKE_EXE_LINKER_FLAGS_OPTIMISED "/DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Linker flags for Optimised configuration" FORCE)
 
-# Enable folder structure in the IDE
-set_property(GLOBAL PROPERTY USE_FOLDERS YES)
-
 # Check if the platform is 64-bit or 32-bit and set appropriate definitions
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X64)
@@ -56,16 +53,42 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     FOLDER "${parent_prj}"
 )
 
-# Add our module implementations included in this lib
-target_sources(${PROJECT_NAME}
-    PRIVATE
-    FILE_SET module_impls TYPE CXX_MODULES
-    FILES
-        core.cppm
+file(GLOB mod_impls CONFIGURE_DEPENDS "src/*.cppm")
+file(GLOB mod_headers CONFIGURE_DEPENDS "src/*.ixx")
 
-    PUBLIC
-    FILE_SET module_headers TYPE CXX_MODULES
-    FILES
-        core.ixx
-)
+file(GLOB impls CONFIGURE_DEPENDS "src/*.cpp")
+file(GLOB headers CONFIGURE_DEPENDS "src/*.h")
 
+# SOURCES
+if(mod_impls)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+        FILE_SET module_impls TYPE CXX_MODULES
+        FILES
+            ${mod_impls}
+    )
+endif()
+
+if(impls)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${impls}
+    )
+endif()
+
+if(mod_headers)
+    target_sources(${PROJECT_NAME}
+        PUBLIC
+        FILE_SET module_headers TYPE CXX_MODULES
+        FILES
+            ${mod_headers}
+    )
+endif()
+
+# INCLUDES
+if(headers)
+    target_include_directories(${PROJECT_NAME}
+        PUBLIC
+            ${headers}
+    )
+endif()

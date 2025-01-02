@@ -48,7 +48,7 @@ add_subdirectory(core)
 # external libs
 add_subdirectory(extern)
 
-add_library(${PROJECT_NAME} art.ixx)
+add_library(${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 23
@@ -66,13 +66,45 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     FOLDER "${parent_prj}"
 )
 
-# Add our modules included in this lib
-target_sources(${PROJECT_NAME}
-    PUBLIC
-    FILE_SET module_headers TYPE CXX_MODULES
-    FILES
-        art.ixx
-)
+file(GLOB mod_impls CONFIGURE_DEPENDS "*.cppm")
+file(GLOB mod_headers CONFIGURE_DEPENDS "*.ixx")
+
+file(GLOB impls CONFIGURE_DEPENDS "*.cpp")
+file(GLOB headers CONFIGURE_DEPENDS "*.h")
+
+# SOURCES
+if(mod_impls)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+        FILE_SET module_impls TYPE CXX_MODULES
+        FILES
+            ${mod_impls}
+    )
+endif()
+
+if(impls)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${impls}
+    )
+endif()
+
+if(mod_headers)
+    target_sources(${PROJECT_NAME}
+        PUBLIC
+        FILE_SET module_headers TYPE CXX_MODULES
+        FILES
+            ${mod_headers}
+    )
+endif()
+
+# INCLUDES
+if(headers)
+    target_include_directories(${PROJECT_NAME}
+        PUBLIC
+            ${headers}
+    )
+endif()
 
 # Link against the subsystem libraries
 target_link_libraries(${PROJECT_NAME} PUBLIC art_core art_extern)
