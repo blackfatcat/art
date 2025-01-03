@@ -37,6 +37,8 @@ set(CMAKE_BUILD_PATH ${build_dir})
 set(extern_include 
         "${CMAKE_CURRENT_SOURCE_DIR}/extern/taskflow/taskflow"
         "${CMAKE_CURRENT_SOURCE_DIR}/extern/entt/src"
+        "${CMAKE_CURRENT_SOURCE_DIR}/core/src"
+        "${CMAKE_CURRENT_SOURCE_DIR}/log/src"
 )
 
 # COMPILE DEFINITIONS
@@ -46,11 +48,24 @@ if(WIN32)
     add_definitions(-D${PROJECT_NAME_UPPER}_WINDOWS)
 endif()
 
-# DEPENDENCIES
-add_subdirectory(core)
+# NEEDED FOR LINKING!! UPDATE WHENEVER A NEW PROJECT IS ADDED!!! ORDER MATTERS - DEPENDENCY TREE or line xd!!!! 
+set(projects_list 
+    "art"
+    "art_core"
+    "art_extern"
+    CACHE STRING "List of all projects" FORCE
+)
 
-# EXTERNAL DEPENDENCIES
-add_subdirectory(extern)
+# ADD ART DEPENDECIES AND SET DEPENDECIES TO OTHER PROJECTS (each project links against all others)
+set(copied_list ${projects_list})
+foreach(prj ${projects_list})
+    list(REMOVE_ITEM copied_list ${prj})
+    set(${prj}_DEPENDENCIES ${copied_list})
+
+    if(NOT ${prj} STREQUAL ${PROJECT_NAME})
+        add_subdirectory(${prj})
+    endif()
+endforeach() 
 
 # TARGET & PROPERTIES
 add_library(${PROJECT_NAME})
@@ -108,5 +123,10 @@ target_include_directories(${PROJECT_NAME}
         ${extern_include}
 )
 
-# Link against the subsystem libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC art_core art_extern)
+foreach(prj ${projects_list})
+    message("Deps for project ${prj}: ${${prj}_DEPENDENCIES} ")
+    target_link_libraries(${prj} PUBLIC ${${prj}_DEPENDENCIES})
+endforeach()
+
+# target_link_libraries(${PROJECT_NAME} PUBLIC art_core art_extern)
+# target_link_libraries(art_core PUBLIC art_extern)
