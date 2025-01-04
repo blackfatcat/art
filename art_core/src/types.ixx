@@ -14,4 +14,13 @@ export {
 		class Allocator = std::allocator<T>
 	>
 	using HashSet = std::unordered_set<T, HashFn, TCompare, Allocator>;
+
+	template <
+		class Key,
+		class Value,
+		class KeyHashFn = std::hash<Key>,
+		class KeyCompare = std::equal_to<Key>,
+		class Allocator = std::allocator<std::pair<const Key, Value>>
+	>
+	using HashMap = std::unordered_map<Key, Value, KeyHashFn, KeyCompare, Allocator>;
 }

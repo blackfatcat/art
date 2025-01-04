@@ -17,12 +17,11 @@ namespace art {
 
 		void LogExperience::build(art::core::Gallery& gallery)
 		{
+			gallery.add_technique([]() {/*std::println("Woop from Log:)");*/ }, "log_1");
+			gallery.add_technique([]() {/*std::println("Woop from Log:)");*/ }, "log_2");
+			gallery.add_technique([]() {/*std::println("Woop from Log:)");*/ }, "log_3");
+			gallery.add_technique([]() {/*std::println("Woop from Log:)");*/ }, "log_4");
+			gallery.add_technique([]() {/*std::println("Woop from Log:)");*/ }, "log_5");
 		}
-
-		StringView LogExperience::get_name()
-		{
-			return "log";
-		}
-
 	} // namespace log
 } // namespace art

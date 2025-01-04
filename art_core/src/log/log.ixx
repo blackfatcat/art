@@ -17,8 +17,6 @@ export namespace art {
 
 			void build(core::Gallery& gallery);
 
-			StringView get_name();
-
 		private:
 
 		};
