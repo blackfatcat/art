@@ -23,7 +23,7 @@ export namespace art {
 			/// in order to add its functionality to it
 			///
 			/// </summary>
-			/// <param name="experience">Experience to be built into the Gallery</param>
+			/// <param name="experience:">instance of an Experience to be built into the Gallery</param>
 			template<typename T>
 			requires requires(T&& experience, art::core::Gallery& gallery)
 			{
@@ -31,7 +31,7 @@ export namespace art {
 			}
 			void add_experience(T&& experience)
 			{
-				// TODO: Get name from type info?
+				// TODO: Get name from type info or meta?
 				StringView name = typeid(experience).name();
 
 				if (!m_experiences.contains(name))
@@ -48,6 +48,11 @@ export namespace art {
 			template <typename Tech>
 			void add_technique(Tech technique, StringView name = "")
 			{
+				// TODO: Place them in separate Flows (Or Subflows) based on parameters 
+				// graphing them based on mutability, cpnflicts, etc
+				// So we can parallelize them as much as possible and build out the main flow of the engine
+				//
+				// See Concepts: p1 - Scheduling & Execution
 				m_mainFlow.emplace(technique).name(name.data());
 			}
 

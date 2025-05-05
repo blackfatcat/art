@@ -18,10 +18,9 @@ namespace art {
 
 		void Gallery::showtife()
 		{
-			std::print("Registered Experiences: ");
+			std::println("Registered Experiences: ");
 			for (const auto& exp_name : m_experiences)
-				std::print("{} ", exp_name);
-			std::println("");
+				std::println("{} ", exp_name);
 
 			while (true)
 			{

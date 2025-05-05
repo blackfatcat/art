@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.31)
 
 # Set project name and uppercase version
-set(PROJECT_NAME "art")
+set(PROJECT_NAME "art_paint")
 set(PROJECT_NAME_UPPER "")
-set(parent_prj "${parent_prj}/${PROJECT_NAME}")
 
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER) # Convert project name to uppercase
 
@@ -16,7 +15,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS_OPTIMISED "/O2 /Zi /DEBUG" CACHE STRING "Flags for Optimised configuration" FORCE)
     set(CMAKE_EXE_LINKER_FLAGS_OPTIMISED "/DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Linker flags for Optimised configuration" FORCE)
 endif()
-
 # Check if the platform is 64-bit or 32-bit and set appropriate definitions
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X64)
@@ -26,55 +24,19 @@ ELSE()
 	MESSAGE( FATAL_ERROR "Unknown CPU architecture, CMAKE will exit." )
 ENDIF()
 
-# Option to build shared or static libraries
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
 # BUILD DIR
-set(build_dir "${root_dir}/build/${platform}/${PROJECT_NAME}")
+set(build_dir "${parent_build_dir}/${PROJECT_NAME}")
 set(CMAKE_BUILD_PATH ${build_dir})
 
-# TODO: Include based on main project needs and setup!
-# TODO: Separate into separate repos?
-
-# SET EXTERNAL INCLUDES TO BE AVAILABLE FOR CHILDREN
-set(extern_include 
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_extern/taskflow/taskflow"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_extern/entt/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_core/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_paint/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_canvas/src"
-)
-
-# COMPILE DEFINITIONS
+# Compile definitions
 
 # Windows only
 if(WIN32)
     add_definitions(-D${PROJECT_NAME_UPPER}_WINDOWS)
 endif()
 
-# NEEDED FOR LINKING!! UPDATE WHENEVER A NEW PROJECT IS ADDED!!! ORDER MATTERS - DEPENDENCY TREE (or line xd)!!!! 
-set(projects_list 
-    "art"
-    "art_paint"
-    "art_canvas"
-    "art_core"
-    "art_extern"
-    CACHE STRING "List of all projects" FORCE
-)
-
-# ADD ART DEPENDECIES AND SET DEPENDECIES TO OTHER PROJECTS (each project links against all others)
-set(copied_list ${projects_list})
-foreach(prj ${projects_list})
-    list(REMOVE_ITEM copied_list ${prj})
-    set(${prj}_DEPENDENCIES ${copied_list})
-
-    if(NOT ${prj} STREQUAL ${PROJECT_NAME})
-        add_subdirectory(${prj})
-    endif()
-endforeach() 
-
 # TARGET & PROPERTIES
-add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME} STATIC)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED ON
@@ -128,11 +90,3 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${extern_include}
 )
-
-foreach(prj ${projects_list})
-    message("Deps for project ${prj}: ${${prj}_DEPENDENCIES} ")
-    target_link_libraries(${prj} PUBLIC ${${prj}_DEPENDENCIES})
-endforeach()
-
-# target_link_libraries(${PROJECT_NAME} PUBLIC art_core art_extern)
-# target_link_libraries(art_core PUBLIC art_extern)
