@@ -117,4 +117,4 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # Link against the subsystem libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow ${ATOMIC_LIBRARY} EnTT SDL3::SDL3)
+target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow ${ATOMIC_LIBRARY} EnTT::EnTT SDL3::SDL3)

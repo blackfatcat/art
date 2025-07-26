@@ -1,10 +1,12 @@
 module;
 
 #include "taskflow/taskflow.hpp"
+#include "entt/entt.hpp"
 
 export module gallery;
 
 import types;
+import util;
 
 export namespace art {
 	
@@ -35,6 +37,8 @@ export namespace art {
 
 				if (!m_experiences.contains(name))
 				{
+					util::log("Building <{}> experience", name);
+
 					experience.build(*this);
 					m_experiences.insert(name);
 				}
@@ -61,6 +65,8 @@ export namespace art {
 			HashSet<StringView> m_experiences;
 			tf::Taskflow m_mainFlow;
 			tf::Executor m_runner;
+
+			Exposition<> m_exposition{};
 		};
 
 

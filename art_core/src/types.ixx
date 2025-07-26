@@ -1,5 +1,7 @@
 module;
 
+#include "entt/entt.hpp"
+
 export module types;
 
 import std;
@@ -29,4 +31,9 @@ export {
 		class Allocator = std::allocator<std::pair<const Key, Value>>
 	>
 	using HashMap = std::unordered_map<Key, Value, KeyHashFn, KeyCompare, Allocator>;
+
+	enum class Piece : uint32_t {};
+
+	template <class EntityType = Piece, class Allocator = std::allocator<EntityType>>
+	using Exposition = entt::basic_registry<EntityType, Allocator>;
 }
