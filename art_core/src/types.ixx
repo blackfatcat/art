@@ -5,6 +5,12 @@ export module types;
 import std;
 
 export {
+	template <
+		class T,
+		class Allocator = std::allocator<T>
+	>
+	using Vector = std::vector<T, Allocator>;
+
 	using StringView = std::string_view;
 
 	template <

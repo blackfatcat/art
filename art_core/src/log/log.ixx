@@ -2,7 +2,7 @@ module;
 
 export module log;
 
-import core;
+import gallery;
 import types;
 
 export namespace art {

@@ -1,11 +1,9 @@
 module;
 
-#include "taskflow/taskflow.hpp"
-#include "entt/entt.hpp"
+#include "SDL3/SDL.h"
 
 export module canvas;
 
-import std;
 import core;
 
 export namespace art {
@@ -18,11 +16,13 @@ export namespace art {
 			Canvas();
 			~Canvas();
 
+			void add_window(StringView name, int16_t width, int16_t height, bool hidden = false);
+
 			void build( art::core::Gallery& gallery );
 
 		private:
+			Vector<SDL_Window*> m_windows;
+			
 		};
-
-
 	} // namespace canvas
 } // namespace art

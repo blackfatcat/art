@@ -2,8 +2,6 @@ module;
 
 module paint;
 
-import std;
-import types;
 import core;
 
 namespace art {
@@ -20,7 +18,6 @@ namespace art {
 
 		void Painter::build( art::core::Gallery& gallery )
 		{
-			std::println("built Painter plugin :)");
 			gallery.add_technique([]() { }, "painter_1");
 		}
 

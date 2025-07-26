@@ -45,6 +45,7 @@ set(TF_BUILD_EXAMPLES OFF CACHE BOOL "Build Taskflow examples" FORCE)
 # external libs
 add_subdirectory(taskflow)
 add_subdirectory(entt)
+add_subdirectory(sdl EXCLUDE_FROM_ALL)
 
 # TARGET & PROPERTIES
 add_library(${PROJECT_NAME})
@@ -52,6 +53,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Emscripten)
     target_link_options(${PROJECT_NAME} PUBLIC -sASSERTIONS=1 -sPROXY_TO_PTHREAD -sTOTAL_MEMORY=1536MB -sEXIT_RUNTIME=1 -sUSE_PTHREADS=1)
     target_compile_options(${PROJECT_NAME} PUBLIC -matomics)
 endif()
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED ON
@@ -67,6 +69,14 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_OPTIMISED "${out_dir}/optimised"
     FOLDER "${parent_prj}"
 )
+
+if(WIN32)
+    add_custom_command(
+        TARGET art_extern POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy $<TARGET_FILE:SDL3::SDL3-shared> $<TARGET_FILE_DIR:art_extern>
+        VERBATIM
+    )
+endif()
 
 file(GLOB_RECURSE mod_impls CONFIGURE_DEPENDS "src/*.cppm")
 file(GLOB_RECURSE mod_headers CONFIGURE_DEPENDS "src/*.ixx")
@@ -107,4 +117,4 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # Link against the subsystem libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow ${ATOMIC_LIBRARY} EnTT)
+target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow ${ATOMIC_LIBRARY} EnTT SDL3::SDL3)

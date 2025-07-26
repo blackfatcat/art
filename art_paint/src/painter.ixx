@@ -5,7 +5,6 @@ module;
 
 export module paint;
 
-import std;
 import core;
 
 export namespace art {
