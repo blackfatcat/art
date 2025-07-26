@@ -1,7 +1,11 @@
 [submodule "extern/taskflow"]
 	path = art_extern/taskflow
-	url = https://github.com/taskflow/taskflow
+	url = https://github.com/blackfatcat/taskflow
 
 [submodule "extern/entt"]
 	path = art_extern/entt
-	url = https://github.com/skypjack/entt
+	url = https://github.com/blackfatcat/entt
+
+[submodule "extern/SDL"]
+	path = art_extern/sdl
+	url = https://github.com/blackfatcat/SDL
