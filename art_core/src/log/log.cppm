@@ -3,6 +3,7 @@ module;
 module log;
 
 import core;
+import std;
 
 namespace art {
 	namespace log {
@@ -17,7 +18,8 @@ namespace art {
 
 		void LogExperience::build(art::core::Gallery& gallery)
 		{
-			gallery.add_technique([]() {/*std::println("Woop from Log:)");*/ }, "log_1");
+			std::println("built logging plugin:)");
+			gallery.add_technique([]() { }, "log_1");
 		}
 	} // namespace log
 } // namespace art

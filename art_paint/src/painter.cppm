@@ -20,7 +20,8 @@ namespace art {
 
 		void Painter::build( art::core::Gallery& gallery )
 		{
-			gallery.add_technique([]() {}, "painter_1");
+			std::println("built Painter plugin :)");
+			gallery.add_technique([]() { }, "painter_1");
 		}
 
 	} // namespace paint

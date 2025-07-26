@@ -1,6 +1,6 @@
 module;
 
-#include "taskflow/taskflow.hpp";
+#include "taskflow/taskflow.hpp"
 
 export module core;
 
@@ -49,7 +49,7 @@ export namespace art {
 			void add_technique(Tech technique, StringView name = "")
 			{
 				// TODO: Place them in separate Flows (Or Subflows) based on parameters 
-				// graphing them based on mutability, cpnflicts, etc
+				// graphing them based on mutability, conflicts, etc
 				// So we can parallelize them as much as possible and build out the main flow of the engine
 				//
 				// See Concepts: p1 - Scheduling & Execution

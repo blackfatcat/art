@@ -1,7 +1,7 @@
 module;
 
-#include "taskflow/taskflow.hpp";
-#include "entt/entt.hpp";
+#include "taskflow/taskflow.hpp"
+#include "entt/entt.hpp"
 
 export module canvas;
 

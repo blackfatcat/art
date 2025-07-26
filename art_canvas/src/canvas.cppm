@@ -20,6 +20,7 @@ namespace art {
 
 		void Canvas::build( art::core::Gallery& gallery )
 		{
+			std::println("built Canvas plugin:)");
 			gallery.add_technique([]() {}, "canvas_1");
 		}
 
