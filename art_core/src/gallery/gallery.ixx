@@ -6,7 +6,6 @@ export module gallery;
 
 import types;
 import util;
-import external;
 
 export namespace art {
 	
