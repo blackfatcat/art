@@ -1,12 +1,12 @@
 module;
 
-#include "taskflow/taskflow.hpp"
-#include "entt/entt.hpp"
+#include <taskflow/taskflow.hpp>
 
 export module gallery;
 
 import types;
 import util;
+import external;
 
 export namespace art {
 	
@@ -37,7 +37,9 @@ export namespace art {
 
 				if (!m_experiences.contains(name))
 				{
-					util::log("Building <{}> experience", name);
+					util::Defer timer = util::profile([&name](std::chrono::duration<double, std::milli> diff) {
+						util::log("Building {} took {}ms", name, diff.count());
+					});
 
 					experience.build(*this);
 					m_experiences.insert(name);
@@ -66,7 +68,7 @@ export namespace art {
 			tf::Taskflow m_mainFlow;
 			tf::Executor m_runner;
 
-			//Exposition<> m_exposition{};
+			Exposition m_exposition;
 		};
 
 

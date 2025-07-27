@@ -1,5 +1,7 @@
 module;
 
+#include <flecs.h>
+
 module gallery;
 
 import types;
@@ -9,7 +11,7 @@ namespace art {
 
 	namespace core {
 
-		Gallery::Gallery()
+		Gallery::Gallery() : m_exposition()
 		{
 		}
 

@@ -1,6 +1,6 @@
 module;
 
-#include "entt/entt.hpp"
+#include <flecs.h>
 
 export module types;
 
@@ -32,8 +32,9 @@ export {
 	>
 	using HashMap = std::unordered_map<Key, Value, KeyHashFn, KeyCompare, Allocator>;
 
-	enum class Piece : uint32_t {};
+	enum class Piece : int {};
+	using Exposition = flecs::world;
 
-	template <class EntityType = Piece, class Allocator = std::allocator<EntityType>>
-	using Exposition = entt::basic_registry<EntityType, Allocator>;
+	template <class FuncType>
+	using Functor = std::function<FuncType>;
 }
