@@ -66,7 +66,7 @@ export namespace art {
 			tf::Taskflow m_mainFlow;
 			tf::Executor m_runner;
 
-			Exposition<> m_exposition{};
+			//Exposition<> m_exposition{};
 		};
 
 

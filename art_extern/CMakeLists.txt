@@ -16,6 +16,14 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_EXE_LINKER_FLAGS_OPTIMISED "/DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Linker flags for Optimised configuration" FORCE)
 endif()
 
+# APPLE NOT ON DARWIN CONFIG
+if ((APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin") OR EMSCRIPTEN)
+    set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")    # Disable shared builds on platforms where it does not make sense to use them
+    set(SDL_SHARED OFF)
+else()
+    set(SDL_SHARED ON)
+endif()
+
 # Check if the platform is 64-bit or 32-bit and set appropriate definitions
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
     ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X64)
