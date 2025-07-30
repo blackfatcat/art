@@ -8,6 +8,14 @@ import <chrono>;
 import types;
 
 export namespace util {
+	// TODO: Move to time module
+	namespace time {
+		auto now = std::chrono::high_resolution_clock::now;
+
+		template<typename Period = std::milli>
+		using Duration = std::chrono::duration<float, Period>;
+	}
+
 	template<typename... Args>
 	void log(StringView fmt, Args&&... args) {
 		std::string msg = std::vformat(fmt, std::make_format_args(args...));
@@ -23,11 +31,11 @@ export namespace util {
 		Functor<void()> func;
 	};
 
-	Defer profile(Functor<void(std::chrono::duration<double, std::milli>)> callback) {
-		const auto start = std::chrono::high_resolution_clock::now();
+	Defer profile(Functor<void(time::Duration<>)> callback) {
+		const auto start = time::now();
 		return Defer([start, callback] {
-			const auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> diff = end - start;
+			const auto end = time::now();
+			time::Duration<> diff = end - start;
 
 			callback(diff);
 		});

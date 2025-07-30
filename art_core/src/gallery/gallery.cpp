@@ -21,9 +21,14 @@ namespace art {
 
 		void Gallery::showtife()
 		{
+			auto start = util::time::now();
 			while (true)
 			{
-				m_runner.run(m_mainFlow).wait();
+				auto end = util::time::now();
+				float delta_time = (end - start).count();
+				start = util::time::now();
+
+				GetExpo().progress(delta_time);
 			}
 		}
 

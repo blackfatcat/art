@@ -1,7 +1,5 @@
 module;
 
-#include <taskflow/taskflow.hpp>
-
 export module paint;
 
 import core;
@@ -19,7 +17,6 @@ export namespace art {
 			void build( art::core::Gallery& gallery );
 
 		private:
-			tf::Taskflow m_ArtFlow;
 		};
 
 

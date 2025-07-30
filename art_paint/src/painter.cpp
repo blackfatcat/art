@@ -10,7 +10,7 @@ namespace art {
 		Painter::~Painter() {}
 
 		void Painter::build(art::core::Gallery& gallery) {
-			gallery.add_technique([]() {}, "painter");
+			//gallery.add_technique([]() {}, "painter");
 		}
 
 	} // namespace paint

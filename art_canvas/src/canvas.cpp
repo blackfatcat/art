@@ -1,6 +1,7 @@
 module;
 
 #include <SDL3/SDL.h>
+#include <flecs.h>
 
 module canvas;
 
@@ -10,32 +11,34 @@ namespace art {
 
 	namespace canvas {
 
-		Canvas::Canvas()
+		SDLCanvasExp::SDLCanvasExp()
 		{
 		}
 
-		Canvas::~Canvas()
+		SDLCanvasExp::~SDLCanvasExp()
 		{
 		}
 
-		void Canvas::add_window(StringView name, int16_t width, int16_t height, bool hidden)
+		void SDLCanvasExp::add_canvas(CanvasComp& canvas)
 		{
-			SDL_Window* window = SDL_CreateWindow(name.data(), width, height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-			m_windows.push_back(window);
+			SDL_Window* window = SDL_CreateWindow(canvas.name, canvas.width, canvas.height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
 
 			if (!window) {
-				util::log("Error Creating widnow with name= {}, width= {}, height= {}. SDL error= {}", name, width, height, SDL_GetError());
+				util::log("Error Creating widnow with name= {}, width= {}, height= {}. SDL error= {}", canvas.name, canvas.width, canvas.height, SDL_GetError());
+				return;
 			}
 
+			//m_canvases.insert({ canvas.name, window });
+
 			// print some information about the window
-			if (!hidden) 
+			if (!canvas.hidden)
 				SDL_ShowWindow(window);
 
 			{
 				int width, height, bbwidth, bbheight;
 				SDL_GetWindowSize(window, &width, &height);
 				SDL_GetWindowSizeInPixels(window, &bbwidth, &bbheight);
-				util::log("Window size: {}x{}}", width, height);
+				util::log("Window size: {}x{}", width, height);
 				util::log("Backbuffer size: {}x{}", bbwidth, bbheight);
 				if (width != bbwidth) {
 					util::log("This is a highdpi environment.");
@@ -43,9 +46,10 @@ namespace art {
 			}
 		}
 
-		void Canvas::build( art::core::Gallery& gallery )
+		void SDLCanvasExp::build( art::core::Gallery& gallery )
 		{
-			gallery.add_technique([]() {}, "canvas_1");
+			gallery.GetExpo().entity().add<CanvasComp>();
+			gallery.add_technique<CanvasComp&>(flecs::OnStart, std::bind(&SDLCanvasExp::add_canvas, this, std::placeholders::_1), "add_canvas");
 		}
 
 	} // namespace canvas

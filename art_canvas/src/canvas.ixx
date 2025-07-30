@@ -1,6 +1,7 @@
 module;
 
 #include <SDL3/SDL.h>
+#include <flecs.h>
 
 export module canvas;
 
@@ -10,19 +11,27 @@ export namespace art {
 	
 	namespace canvas {
 
-		class Canvas
+		struct CanvasComp
+		{
+			CanvasComp() {}
+			const char* name = "window";
+			int16_t width = 1920;
+			int16_t height = 1080;
+			bool hidden = false;
+		};
+
+		class SDLCanvasExp
 		{
 		public:
-			Canvas();
-			~Canvas();
+			SDLCanvasExp();
+			~SDLCanvasExp();
 
-			void add_window(StringView name, int16_t width, int16_t height, bool hidden = false);
+			void add_canvas(CanvasComp& canvas);
 
 			void build( art::core::Gallery& gallery );
 
 		private:
-			Vector<SDL_Window*> m_windows;
-			
+			HashMap<StringView, SDL_Window*> m_canvases;
 		};
 	} // namespace canvas
 } // namespace art

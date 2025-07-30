@@ -18,7 +18,7 @@ namespace art {
 
 		void LogExperience::build(art::core::Gallery& gallery)
 		{
-			gallery.add_technique([]() { }, "log");
+			//gallery.add_technique([]() { }, "log");
 		}
 	} // namespace log
 } // namespace art
