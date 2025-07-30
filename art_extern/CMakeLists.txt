@@ -48,11 +48,10 @@ if(WIN32)
     add_definitions(-D${PROJECT_NAME_UPPER}_WINDOWS)
 endif()
 
-set(TF_BUILD_TESTS OFF CACHE BOOL "Build Taskflow tests" FORCE) 
-set(TF_BUILD_EXAMPLES OFF CACHE BOOL "Build Taskflow examples" FORCE)
+set(FLECS_SHARED OFF CACHE BOOL "Build shared flecs lib")
+set(FLECS_PIC OFF CACHE BOOL "Compile static flecs lib with position independent code (PIC)")
 
 # external libs
-add_subdirectory(taskflow)
 add_subdirectory(flecs)
 add_subdirectory(sdl EXCLUDE_FROM_ALL)
 
@@ -126,4 +125,4 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # Link against the subsystem libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC Taskflow PUBLIC ${ATOMIC_LIBRARY} PUBLIC flecs::flecs_static PUBLIC SDL3::SDL3)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${ATOMIC_LIBRARY} PUBLIC flecs::flecs_static PUBLIC SDL3::SDL3)

@@ -1,7 +1,3 @@
-[submodule "extern/taskflow"]
-	path = art_extern/taskflow
-	url = https://github.com/blackfatcat/taskflow
-
 [submodule "extern/flecs"]
 	path = art_extern/flecs
 	url = https://github.com/blackfatcat/flecs
