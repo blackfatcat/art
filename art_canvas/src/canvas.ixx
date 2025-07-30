@@ -11,23 +11,23 @@ export namespace art {
 	
 	namespace canvas {
 
-		struct CanvasComp
+		struct Canvas
 		{
-			CanvasComp() {}
+			Canvas() {}
 			const char* name = "window";
 			int16_t width = 1920;
 			int16_t height = 1080;
 			bool hidden = false;
 		};
 
-		class SDLCanvasExp
+		class SDLCanvasHnadler
 		{
 		public:
-			SDLCanvasExp();
-			~SDLCanvasExp();
+			void add_canvas(Canvas& canvas);
+			void update_canvas(art::core::ExpoState& expo_state);
 
-			void add_canvas(CanvasComp& canvas);
-
+			static SDLCanvasHnadler* create();
+			static void destroy(void* self) { delete reinterpret_cast<SDLCanvasHnadler*>(self); }
 			void build( art::core::Gallery& gallery );
 
 		private:

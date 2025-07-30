@@ -17,9 +17,17 @@ export namespace util {
 	}
 
 	template<typename... Args>
-	void log(StringView fmt, Args&&... args) {
+	void log(std::source_location caller, StringView fmt, Args&&... args) {
 		std::string msg = std::vformat(fmt, std::make_format_args(args...));
-		std::cout << msg << std::endl;
+		std::print("\x1B[32mINFO\033[0m\t: {} at Line: {}: ", caller.file_name(), caller.line());
+		std::cout << msg << std::endl << std::endl;
+	}
+
+	template<typename... Args>
+	void error(std::source_location caller, StringView fmt, Args&&... args) {
+		std::string msg = std::vformat(fmt, std::make_format_args(args...));
+		std::print("\x1B[31mINFO\033[0m\t: {} at Line: {}: ", caller.file_name(), caller.line());
+		std::cout << msg << std::endl << std::endl;
 	}
 
 	class Defer {

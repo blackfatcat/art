@@ -12,9 +12,8 @@ export namespace art {
 		class LogExperience
 		{
 		public:
-			LogExperience();
-			~LogExperience();
-
+			static LogExperience* create() { return new LogExperience{}; }
+			static void destroy(void* self) { delete reinterpret_cast<LogExperience*>(self); }
 			void build(core::Gallery& gallery);
 
 		private:

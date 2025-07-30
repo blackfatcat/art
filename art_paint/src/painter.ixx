@@ -11,8 +11,8 @@ export namespace art {
 		class Painter
 		{
 		public:
-			Painter();
-			~Painter();
+			static Painter* create() { return new Painter{}; }
+			static void destroy(void* self) { delete reinterpret_cast<Painter*>(self); }
 
 			void build( art::core::Gallery& gallery );
 
