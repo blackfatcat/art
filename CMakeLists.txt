@@ -36,15 +36,6 @@ set(CMAKE_BUILD_PATH ${build_dir})
 # TODO: Include based on main project needs and setup!
 # TODO: Separate into separate repos?
 
-# SET EXTERNAL INCLUDES TO BE AVAILABLE FOR CHILDREN
-set(extern_include 
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_extern/taskflow/taskflow"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_extern/entt/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_core/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_paint/src"
-        "${CMAKE_CURRENT_SOURCE_DIR}/art_canvas/src"
-)
-
 # COMPILE DEFINITIONS
 
 # Windows only
@@ -133,6 +124,3 @@ foreach(prj ${projects_list})
     message("Deps for project ${prj}: ${${prj}_DEPENDENCIES} ")
     target_link_libraries(${prj} PUBLIC ${${prj}_DEPENDENCIES})
 endforeach()
-
-# target_link_libraries(${PROJECT_NAME} PUBLIC art_core art_extern)
-# target_link_libraries(art_core PUBLIC art_extern)

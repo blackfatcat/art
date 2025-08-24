@@ -92,6 +92,12 @@ file(GLOB_RECURSE mod_headers CONFIGURE_DEPENDS "src/*.ixx")
 file(GLOB_RECURSE impls CONFIGURE_DEPENDS "src/*.cpp")
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "src/*.h")
 
+# SET EXTERNAL INCLUDES TO BE AVAILABLE FOR CHILDREN
+set(extern_include 
+    "${CMAKE_CURRENT_SOURCE_DIR}/art_extern/taskflow/taskflow"
+    "${CMAKE_CURRENT_SOURCE_DIR}/art_extern/entt/src"
+)
+
 # SOURCES
 target_sources(${PROJECT_NAME}
     PRIVATE

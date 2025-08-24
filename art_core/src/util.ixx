@@ -3,8 +3,6 @@ module;
 export module util;
 
 import std;
-import <ratio>;
-import <chrono>;
 import types;
 
 export namespace util {
