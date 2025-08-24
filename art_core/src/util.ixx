@@ -2,7 +2,15 @@ module;
 
 export module util;
 
-import std;
+#pragma warning ( disable : 5244 ) 
+
+#include <ratio>
+#include <chrono>
+#include <iostream>
+#include <source_location>
+#include <print>
+#include <format>
+
 import types;
 
 export namespace util {

@@ -11,20 +11,24 @@ project(${PROJECT_NAME} VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Optimised" CACHE STRING "" FORCE)
 
+# set(CMAKE_CXX_EXTENSIONS OFF)
+# set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+
 # MSVC ONLY COMPILE OPTIONS
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS_OPTIMISED "/O2 /Zi /DEBUG" CACHE STRING "Flags for Optimised configuration" FORCE)
     set(CMAKE_EXE_LINKER_FLAGS_OPTIMISED "/DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Linker flags for Optimised configuration" FORCE)
 endif()
 
-# Check if the platform is 64-bit or 32-bit and set appropriate definitions
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X64)
-ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X86)
-ELSE()
-	MESSAGE( FATAL_ERROR "Unknown CPU architecture, CMAKE will exit." )
-ENDIF()
+if(CMAKE_GENERATOR STREQUAL "Ninja")
+    # TODO: This is obtrusive. Use string(FIND <string> <substring> <output_variable>)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmodules -fbuiltin-module-map")
+
+    set(CMAKE_EXPERIMENTAL_CXX_SCANDEP_SOURCE true)
+    set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP true)
+    set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API true)
+endif()
 
 # Option to build shared or static libraries
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -112,12 +116,6 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${headers}
-)
-
-# EXTERNAL INCUDE DIRS
-target_include_directories(${PROJECT_NAME}
-    PUBLIC
-        ${extern_include}
 )
 
 foreach(prj ${projects_list})

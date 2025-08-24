@@ -4,7 +4,16 @@ module;
 
 export module types;
 
-import std;
+#pragma warning ( disable : 5244 ) 
+
+#include <vector>
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include <unordered_set>
+#include <functional>
+#include <memory>
+#include <utility>
 
 export {
 	template <

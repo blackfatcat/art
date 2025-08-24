@@ -15,14 +15,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS_OPTIMISED "/O2 /Zi /DEBUG" CACHE STRING "Flags for Optimised configuration" FORCE)
     set(CMAKE_EXE_LINKER_FLAGS_OPTIMISED "/DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Linker flags for Optimised configuration" FORCE)
 endif()
-# Check if the platform is 64-bit or 32-bit and set appropriate definitions
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X64)
-ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    ADD_DEFINITIONS(-D${PROJECT_NAME_UPPER}_X86)
-ELSE()
-	MESSAGE( FATAL_ERROR "Unknown CPU architecture, CMAKE will exit." )
-ENDIF()
 
 # BUILD DIR
 set(build_dir "${parent_build_dir}/${PROJECT_NAME}")
@@ -83,10 +75,4 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${headers}
-)
-
-# EXTERNAL INCUDE DIRS
-target_include_directories(${PROJECT_NAME}
-    PUBLIC
-        ${extern_include}
 )

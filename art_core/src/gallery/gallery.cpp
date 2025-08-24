@@ -38,8 +38,6 @@ namespace art {
 				util::log(std::source_location::current(), "Destorying {}...", name);
 				destroyer(m_experiences[name]);
 			}
-
-			util::log(std::source_location::current(), "");
 		}
 
 	} // namespace core

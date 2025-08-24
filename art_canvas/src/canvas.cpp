@@ -3,6 +3,8 @@ module;
 #include <SDL3/SDL.h>
 #include <flecs.h>
 
+#include <functional> 
+
 module canvas;
 
 import core;

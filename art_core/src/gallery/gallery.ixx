@@ -2,6 +2,8 @@ module;
 
 #include <flecs.h>
 
+#include <functional> // std::bind
+
 export module gallery;
 
 import types;
